@@ -45,7 +45,7 @@ public class NaiveMultipleFilesystemMain {
       //Get the filesystem - HDFS
       FileSystem fs1;
       FileSystem fs2;
-      if(mode == "naive") {
+      if(mode.equals("naive")) {
          fs1 = FileSystem.get(URI.create(hdfsuri), conf);
          fs2 = FileSystem.get(URI.create(hdfsuri), conf);
       } else {
