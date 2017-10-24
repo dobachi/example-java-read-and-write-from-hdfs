@@ -26,7 +26,8 @@ public class Main {
       String hdfsuri = args[0];
 
       String path="/user/hdfs/example/hdfs/";
-      String fileName="hello.csv";
+      String fileName1="hello1.csv";
+      String fileName2="hello2.csv";
       String fileContent="hello;world";
 
       // ====== Init HDFS File System Object
@@ -40,39 +41,41 @@ public class Main {
       System.setProperty("HADOOP_USER_NAME", "hdfs");
       System.setProperty("hadoop.home.dir", "/");
       //Get the filesystem - HDFS
-      FileSystem fs = FileSystem.get(URI.create(hdfsuri), conf);
+      FileSystem fs1 = FileSystem.get(URI.create(hdfsuri), conf);
+      FileSystem fs2 = FileSystem.get(URI.create(hdfsuri), conf);
 
       //==== Create folder if not exists
-      Path workingDir=fs.getWorkingDirectory();
+      Path workingDir=fs1.getWorkingDirectory();
       Path newFolderPath= new Path(path);
-      if(!fs.exists(newFolderPath)) {
+      if(!fs1.exists(newFolderPath)) {
          // Create new Directory
-         fs.mkdirs(newFolderPath);
+         fs1.mkdirs(newFolderPath);
          logger.info("Path "+path+" created.");
       }
 
-      //==== Write file
+      //==== Write file1
       logger.info("Begin Write file into hdfs");
       //Create a path
-      Path hdfswritepath = new Path(newFolderPath + "/" + fileName);
+      Path hdfswritepath1 = new Path(newFolderPath + "/" + fileName1);
       //Init output stream
-      FSDataOutputStream outputStream=fs.create(hdfswritepath);
+      FSDataOutputStream outputStream1 = fs1.create(hdfswritepath1);
       //Cassical output stream usage
-      outputStream.writeBytes(fileContent);
-      outputStream.close();
-      logger.info("End Write file into hdfs");
+      outputStream1.writeBytes(fileContent);
+      outputStream1.close();
+      fs1.close();
+      logger.info("End Write file1 into hdfs");
 
-      //==== Read file
-      logger.info("Read file into hdfs");
+      //==== Write file2
+      logger.info("Begin Write file2 into hdfs");
       //Create a path
-      Path hdfsreadpath = new Path(newFolderPath + "/" + fileName);
-      //Init input stream
-      FSDataInputStream inputStream = fs.open(hdfsreadpath);
-      //Classical input stream usage
-      String out= IOUtils.toString(inputStream, "UTF-8");
-      logger.info(out);
-      inputStream.close();
-      fs.close();
+      Path hdfswritepath2 = new Path(newFolderPath + "/" + fileName2);
+      //Init output stream
+      FSDataOutputStream outputStream2 = fs2.create(hdfswritepath2);
+      //Cassical output stream usage
+      outputStream2.writeBytes(fileContent);
+      outputStream2.close();
+      fs2.close();
+      logger.info("End Write file into hdfs");
 
    }
 }
