@@ -61,7 +61,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>io.saagie.example.hdfs.Main</mainClass>
+                            <mainClass>io.saagie.example.hdfs.NaiveMultipleFilesystemMain</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

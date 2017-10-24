@@ -11,9 +11,9 @@ import org.apache.hadoop.fs.Path;
 import java.net.URI;
 import java.util.logging.Logger;
 
-public class Main {
+public class NaiveMultipleFilesystemMain {
 
-   private static final Logger logger = Logger.getLogger("io.saagie.example.hdfs.Main");
+   private static final Logger logger = Logger.getLogger("io.saagie.example.hdfs.NaiveMultipleFilesystemMain");
 
    public static void main(String[] args) throws Exception {
       //HDFS URI
@@ -24,6 +24,7 @@ public class Main {
          System.exit(128);
       }
       String hdfsuri = args[0];
+      String mode = args[1];
 
       String path="/user/hdfs/example/hdfs/";
       String fileName1="hello1.csv";
@@ -40,9 +41,18 @@ public class Main {
       // Set HADOOP user
       System.setProperty("HADOOP_USER_NAME", "hdfs");
       System.setProperty("hadoop.home.dir", "/");
+
       //Get the filesystem - HDFS
-      FileSystem fs1 = FileSystem.get(URI.create(hdfsuri), conf);
-      FileSystem fs2 = FileSystem.get(URI.create(hdfsuri), conf);
+      FileSystem fs1;
+      FileSystem fs2;
+      if(mode == "naive") {
+         fs1 = FileSystem.get(URI.create(hdfsuri), conf);
+         fs2 = FileSystem.get(URI.create(hdfsuri), conf);
+      } else {
+         fs1 = FileSystem.newInstance(URI.create(hdfsuri), conf);
+         fs2 = FileSystem.newInstance(URI.create(hdfsuri), conf);
+
+      }
 
       //==== Create folder if not exists
       Path workingDir=fs1.getWorkingDirectory();
